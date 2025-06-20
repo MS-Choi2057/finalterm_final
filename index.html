@@ -54,7 +54,8 @@
     background-size: cover, 200px;
     background-position: center, bottom;
     background-repeat: repeat;
-    z-index: -1;
+    z-index: 1;
+    cursor: pointer;
         }
         
         .content {
@@ -62,6 +63,9 @@
             display: flex;
             flex-direction: column;
             justify-content: space-between;
+            position: relative;
+            z-index: 2;
+            pointer-events: none;
         }
         
         .header {
@@ -144,6 +148,7 @@
             justify-content: center;
             cursor: url(cursor.cur), auto;
             transition: transform 0.2s;
+            pointer-events: all;
         }
         
         .file:hover {
@@ -187,7 +192,8 @@
             color: red;
             background-color: #000;
             border-radius: 0px;
-            z-index: 100;
+            z-index: 200;
+            pointer-events: all;
         }
         
         .copyright {
@@ -237,8 +243,8 @@
             opacity: 1;
         }
         
-        /* 스페이스바 안내 텍스트 */
-        .spacebar-hint {
+        /* 클릭 안내 텍스트 */
+        .click-hint {
             position: fixed;
             bottom: 20%;
             left: 50%;
@@ -259,7 +265,7 @@
             font-family: 'dosMyungjo';
             font-size: 14px;
             font-weight: bold;
-            z-index: -1;
+            z-index: 50;
             pointer-events: none;
             text-shadow: 0 0 10px rgba(0, 0, 0, 0.8);
             animation: fall linear;
@@ -355,7 +361,7 @@
         </div>
     </div>
 
-    <div class="spacebar-hint">스페이스바를 눌러 배경을 변경하세요</div>
+    <div class="click-hint">배경을 클릭하여 배경을 변경하세요</div>
 
     <script>
         // 배경 이미지 배열
@@ -403,8 +409,8 @@
             const duration = Math.random() * 5 + 1;
             letter.style.animationDuration = duration + 's';
             
-            // 랜덤 크기 (14~24px)
-            const size = Math.random() * 15 + 30;
+            // 랜덤 크기 (20~40px)
+            const size = Math.random() * 20 + 20;
             letter.style.fontSize = size + 'px';
             
             // 랜덤 투명도
@@ -422,34 +428,33 @@
 
         // 떨어지는 글자 효과 시작
         function startFallingLetters() {
-            // 0.5~2초마다 새로운 글자 생성
+            // 0.2~0.8초마다 새로운 글자 생성 (더 자주, 더 많이)
             setTimeout(() => {
                 createFallingLetter();
                 startFallingLetters();
-            }, Math.random() * 1500 + 500);
+            }, Math.random() * 600 + 200);
         }
 
-        // 스페이스바 이벤트 리스너
-        document.addEventListener('keydown', function(event) {
-            // 스페이스바가 눌렸을 때 (키코드 32 또는 ' ')
-            if (event.code === 'Space') {
-                event.preventDefault(); // 페이지 스크롤 방지
-                
-                // 다음 배경으로 변경
-                currentBackgroundIndex = (currentBackgroundIndex + 1) % backgrounds.length;
-                const currentBg = backgrounds[currentBackgroundIndex];
-                
-                // 배경 이미지 변경
-                backgroundElement.style.backgroundImage = `
-                    url(${currentBg.main}),
-                    url(${currentBg.glitch})
-                `;
+        // 추가로 더 많은 글자를 위한 별도 함수
+        function startExtraFallingLetters() {
+            // 0.3~1초마다 추가 글자 생성
+            setTimeout(() => {
+                createFallingLetter();
+                startExtraFallingLetters();
+            }, Math.random() * 700 + 300);
+        }
 
-                // 스페이스바를 누를 때마다 추가 글자들을 빠르게 생성
-                for (let i = 0; i < 5; i++) {
-                    setTimeout(() => createFallingLetter(), i * 150);
-                }
-            }
+        // 배경 클릭 이벤트 리스너
+        backgroundElement.addEventListener('click', function(event) {
+            // 다음 배경으로 변경
+            currentBackgroundIndex = (currentBackgroundIndex + 1) % backgrounds.length;
+            const currentBg = backgrounds[currentBackgroundIndex];
+            
+            // 배경 이미지 변경
+            backgroundElement.style.backgroundImage = `
+                url(${currentBg.main}),
+                url(${currentBg.glitch})
+            `;
         });
 
         // 페이지 로드 시 초기 설정
@@ -460,8 +465,20 @@
                 url(${currentBg.glitch})
             `;
             
-            // 떨어지는 글자 효과 시작
+            // 떨어지는 글자 효과 시작 (여러 개의 스트림)
             startFallingLetters();
+            startExtraFallingLetters();
+            
+            // 추가로 더 많은 글자를 위한 세 번째 스트림
+            setTimeout(() => {
+                function startMoreFallingLetters() {
+                    setTimeout(() => {
+                        createFallingLetter();
+                        startMoreFallingLetters();
+                    }, Math.random() * 800 + 400);
+                }
+                startMoreFallingLetters();
+            }, 1000);
 
         });
     </script>
