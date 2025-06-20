@@ -21,6 +21,13 @@
     font-style: normal;
 }
 
+@font-face {
+    font-family: 'DOSMyungjo';
+    src: url('https://fastly.jsdelivr.net/gh/projectnoonnu/noonfonts_eight@1.0/DOSMyungjo.woff') format('woff');
+    font-weight: normal;
+    font-style: normal;
+}
+
         body, html {
             overflow: hidden;
             cursor: url(cursor.cur), auto;
@@ -116,7 +123,9 @@
         .files-container {
             display: flex;
             justify-content: flex-end;
+            flex: 1;
             padding: 50px; margin-right: 60px;
+            margin-bottom: 100px;
         }
         
         .files {
@@ -166,14 +175,19 @@
         }
         
         .footer {
-            width: 1200px;
-            margin: auto;
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            max-width: 1200px;
+            margin: 0 auto;
             display: flex;
             justify-content: space-between;
             padding: 20px;
             color: red;
             background-color: #000;
             border-radius: 0px;
+            z-index: 100;
         }
         
         .copyright {
@@ -200,6 +214,9 @@
             transition: opacity 0.3s ease;
         }
 
+        .file-icon img:hover{
+            cursor: url(cursor.cur), auto;}
+
         .file-icon {
             position: relative;
         }
@@ -211,8 +228,9 @@
             transition: opacity 0.3s ease;
             border-radius: 20px;
             background-image: url('glitch2.gif');
-            background-size: cover;
+            background-size: cover; 
             background-position: center;
+            cursor: url(cursor.cur), auto;
         }
 
         .file-icon:hover .glitch-overlay {
@@ -238,7 +256,7 @@
         .falling-letter {
             position: fixed;
             color: #ff0000;
-            font-family: 'SBAggroB';
+            font-family: 'dosMyungjo';
             font-size: 14px;
             font-weight: bold;
             z-index: -1;
@@ -257,6 +275,9 @@
                 opacity: 0.6;
             }
         }
+
+
+        
     </style>
 </head>
 <body>
